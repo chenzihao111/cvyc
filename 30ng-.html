@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+#div1 div,#div2 div{ width:200px; height:200px; border:1px red solid; display:none;}
+#div1 input.active , #div2 input.active{ background:red;}
+</style>
+<script src="jquery-1.11.1.js"></script>
+<script src="js/angular.min.js"></script>
+<script>
+   var m1 = angular.module('myApp',[]);
+       m1.directive('myTab',function(){
+		   return{
+			   restrict:'E', //定义为标签
+			   replace:true, 
+			   scope:{
+				   myId:'@',   //字符串
+				   myData:'='  //数据
+			   },
+			   controller:['$scope',function($scope){
+				   $scope.name = 'miaov';
+				   $scope.age = '12';
+			   }],		   
+			   templateUrl:'temp3-.html',
+			   link:function(scope,element,attr){
+				   console.log(element.children.length);	
+				   console.log(document.getElementsByTagName('input')[0])		   
+				   element.delegate('input','click',function(){ // // / // /委托
+					   $(this).attr('class','active').siblings('input').attr('class','');
+					   $(this).siblings('div').eq($(this).index()).css('display','block').siblings('div').css('display','none');
+				   })
+			   }   
+		   }
+	   })
+	   m1.controller('Aaa',['$scope',function($scope){
+		   $scope.data1 = [
+			   {title:"数学",content:"1111"},
+			   {title:"语文",content:"2222"},
+			   {title:"英语",content:"3333"}
+		   ]
+		   $scope.data2 = [
+			   {title:"地理",content:"4444"},
+			   {title:"物理",content:"5555"},
+			   {title:"化学",content:"6666"}			   
+		   ]
+	   }])
+ 
+
+</script>
+</head>
+
+<body ng-controller="Aaa">
+    <my-tab my-id="div1" my-data="data1"></my-tab>
+    <my-tab my-id="div2" my-data="data2"></my-tab>
+</body>
+</html>

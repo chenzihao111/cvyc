@@ -1,0 +1,129 @@
+<!doctype html>
+<html ng-app="myApp1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=320px ,initial-scale=1, user-scalable=no" />
+<link href="css/index1.css" rel="stylesheet">
+<title>看大片</title>
+<script src="js/zepto.min.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/zQuery.js"></script>
+<script src="js/myFn.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="http://code.angularjs.org/1.2.9/angular-cookies.min.js"></script>
+<script>
+    var json = [];
+	var arr = []; 
+	var m1 = angular.module('myApp1',['ngCookies']);
+		m1.controller('aaa',['$scope','$http','$window','$timeout','$cookieStore',function($scope,$http,$window,$timeout,$cookieStore){
+			var dataList=[];
+			for(var i=0; i<6; i++){
+				dataList.push({coverHotUrl:'img/loading.gif'})
+			}
+			$scope.dataList = dataList
+			$http.get('./index.json.js').success(function(data,state,headers,config){
+				var HotFilm = []
+				for(var i =0; i<data.videoList.length; i++){
+					json[data.videoList[i].typeName] = [];
+					if(data.videoList[i].isHot == 1){
+						HotFilm.push(data.videoList[i])
+					}
+                    for(var j=0; j<data.videoList.length; j++){						
+						if(data.videoList[i].typeName == data.videoList[j].typeName){
+							json[data.videoList[i].typeName].push(data.videoList[j]);
+							
+						}
+					}					
+				}
+				for(var key in json){
+					arr.push(json[key])
+				}				
+				$scope.dataList = HotFilm;  	//热映新片
+				$scope.dataContent = arr;       //分类内容
+			});
+			$scope.lanLoading = function(){
+				$scope.$apply(function(){
+					var oContentBox = document.getElementById('oContentBox');	
+					var aImg = oContentBox.getElementsByTagName('img');			
+						//要加载的条件 img.top<scrollTop+clientHeight
+						var scrTop=document.documentElement.scrollTop||document.body.scrollTop;
+						var clientH=document.documentElement.clientHeight;
+						for(var i=0;i<aImg.length;i++){
+							//求每一张图的到页面顶端的距离						
+							var imgTop=getPos(aImg[i]).top;
+							if(imgTop<scrTop+clientH){
+								aImg[i].src=aImg[i].getAttribute('src2');						
+							}
+						}						
+				})		
+			}
+			angular.element($window).bind("scroll", function(e) {
+                 $scope.lanLoading();
+			})	
+			angular.element($window).bind("load", function(e) {
+                 $scope.lanLoading();
+			})	
+			$scope.toPlayVideo = function(id){
+				alert(id)
+				$cookieStore.put('id',id);
+				window.location.href = 'artboard7_angularJs.html';
+			}											
+		}]);	
+</script>
+</head>
+    <body ng-controller="aaa">
+        <!--artboard1-->
+        <section class="page pageShow videoPage" id="artboard1">
+            <input type="text" value="看大片" class="sBar" disabled>
+<!--            <img src="img/search.png" class="searchIcon">-->
+            <p class="cut_one"></p>
+            <dl class="bigImg" fromtype="1">
+               <dt id="211"><img src="img/banner/banner.png"></dt>
+               <dd>边境风云</dd>
+            </dl>
+            <div class="totalBox">
+                    <div class="blum2 hotFilm">
+                       <h2>热映新片</h2>
+                       <dl ng-repeat="data in dataList">
+                          <dt ng-attr-id="{{data.id}}"><img ng-src="{{data.coverHotUrl}}" ng-click="toPlayVideo(data.id)"></dt>
+                          <dd>{{data.videoName}}</dd>
+                       </dl>                                                                     
+                    </div>
+                     <div class="clearFloat"></div>
+                     <!-- <div class="advert"><img src="http://v.wifiwin.cn/ad_images/bydr.jpg"></div>-->
+                    <div id="oContentBox"> 
+                        <div class="blum3" ng-repeat="data in dataContent">
+                           <h2>{{data[0].typeName}}</h2>  
+                           <dl ng-repeat="dataPage in data">
+                              <dt ng-attr-id="{{dataPage.id}}"><img ng-attr-src2="{{dataPage.coverUrl}}" ng-click="toPlayVideo(dataPage.id)"></dt>
+                              <dd>
+                                <p>{{dataPage.videoName}}</p>
+                                <span>{{dataPage.detail}}</span>
+                              </dd>
+                           </dl>                                                                                            
+                        </div>
+                    </div>
+             </div>
+             <p class='bottomLoading' style="display:none;"><img src="img/bottomloading.gif"><span>数据加载中...</span></p>
+        </section>  
+
+        <footer class="footPage">
+           <div id="foot">
+               <ul>
+                 <li><a href="http://192.168.8.111:8080/cv_h5blayvideo/index.html"><img src="img/1.png"><p>首页</p></a></li>
+                 <li><a href="http://192.168.8.111:8080/cv_h5blayvideo/artboard2.html"><img src="img/2-2.png"><p>分类</p></a></li>
+                 <li><a href="http://192.168.8.111:8080/cv_h5blayvideo/artboard3.html"><img src="img/3-3.png"><p>我的</p></a></li>
+               </ul>
+            </div>
+        </footer>
+    </body>
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96768ea3ca103b6f6bdacc54c8f14603";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</html>

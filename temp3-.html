@@ -1,0 +1,10 @@
+<div id="{{myId}}">
+<!--   <input type="button" class="active" value="1" ng-click="myFn()">
+   <input type="button" value="2">
+   <input type="button" value="3">
+   <div style="display:block;">{{myContent}}</div>
+   <div>222</div>
+   <div>333</div>-->
+   <input ng-repeat="data in myData" type="button" ng-value="data.title" ng-class="{active:$odd}">
+   <div ng-repeat="data in myData" ng-style="{display:$odd?'block':'none'}">{{data.content}}</div>
+</div>

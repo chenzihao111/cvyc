@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+#div1 div{ width:200px; height:200px; border:1px red solid; display:none;}
+#div2 div{ width:200px; height:200px; border:1px green solid; display:none;}
+#div1 input.active{ background:red;}
+#div2 input.active{ background:green;}
+</style>
+<script src="js/angular.min.js"></script>
+<script>
+   var m1 = angular.module('myApp',[]);
+	   m1.directive('myTab',function(){
+		   return{
+			   restrict:'ACEM', //定义A->属性 C->class E->标签 M->注释
+			   replace:true,
+			   scope:{
+				   myId:'@',       //字符串
+			       myContent:'=',  //变量，数据
+				   myFn:'&'        //函数
+			   },
+			   templateUrl:'temp2-.html'
+		   }
+	   })
+	   m1.controller('Aaa',['$scope',function($scope){
+		   $scope.myContent1 = 'hello';
+		   $scope.myContent2 = 'hi';
+		   $scope.myFn1 = function(){
+			   alert(1)
+		   }
+		   $scope.myFn2 = function(){
+			   alert(2)
+		   }		   
+	   }])
+</script>
+</head>
+
+<body ng-controller="Aaa">
+   <my-tab my-id="div1" my-content="myContent1" my-fn="myFn1()"></my-tab>
+   <my-tab my-id="div2" my-content="myContent2" my-fn="myFn2()"></my-tab>
+</body>
+</html>

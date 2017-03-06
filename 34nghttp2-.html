@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<script src="js/angular.min.js"></script>
+<script>
+
+var m1 = angular.module('myApp',[]);
+m1.controller('Aaa',['$scope','$http','$timeout',function($scope,$http,$timeout){
+	
+//https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su? 数据请求地址
+		
+var timer = null
+		
+   
+	 	
+      $scope.show = function(name){
+		  $timeout.cancel(timer);
+		  timer = $timeout(function(){
+				console.log(name)
+				$http({
+					method : 'JSONP',
+					url : 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+name+'&cb=JSON_CALLBACK'
+				}).success(function(data){
+					$scope.data = data.s
+				});					  
+		  },400)
+	  }
+	
+	
+	
+	
+	
+}]);
+
+</script>
+</head>
+
+<body>
+<div ng-controller="Aaa">
+    <input type="text" ng-model="name" ng-change="show(name)">
+    <input type="button" ng-click="show()" value="search">
+    <ul>
+       <li ng-repeat="da in data">{{da}}</li>
+    </ul>
+</div>
+</body>
+</html>
