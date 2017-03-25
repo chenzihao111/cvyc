@@ -10,12 +10,12 @@
 <script src="js/zQuery.js"></script>
 <script src="js/myFn.js"></script>
 <script src="js/angular.min.js"></script>
-<script src="http://code.angularjs.org/1.2.9/angular-cookies.min.js"></script>
+<!--<script src="http://code.angularjs.org/1.2.9/angular-cookies.min.js"></script>-->
 <script>
     var json = [];
 	var arr = []; 
-	var m1 = angular.module('myApp1',['ngCookies']);
-		m1.controller('aaa',['$scope','$http','$window','$timeout','$cookieStore',function($scope,$http,$window,$timeout,$cookieStore){
+	var m1 = angular.module('myApp1');
+		m1.controller('aaa',['$scope','$http','$window','$timeout',function($scope,$http,$window,$timeout){
 			var dataList=[];
 			for(var i=0; i<6; i++){
 				dataList.push({coverHotUrl:'img/loading.gif'})
@@ -65,7 +65,6 @@
 			})	
 			$scope.toPlayVideo = function(id){
 				alert(id)
-				$cookieStore.put('id',id);
 				window.location.href = 'artboard7_angularJs.html';
 			}											
 		}]);	
